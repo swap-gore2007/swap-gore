@@ -1,8 +1,8 @@
 {
   "workflow": {
     "unique_name": "definition_workflow_021IHP67042647O7JSB2M1wigNbof5h8wV5",
-    "name": "Philips Hue - Refershing Access Token & Refresh Token",
-    "title": "Philips Hue - Refershing Access Token & Refresh Token",
+    "name": "Philips Hue - Refreshing Access Token & Refresh Token",
+    "title": "Philips Hue - Refreshing Access Token & Refresh Token",
     "type": "generic.workflow",
     "base_type": "workflow",
     "variables": null,
@@ -12,7 +12,7 @@
       },
       "delete_workflow_instance": false,
       "description": "This workflow will refresh Philips Hue API access token and refersh token before 7 days. This is because generated Access token will expire after 7 days.\nThis workflow will use already created Refersh Token in \"Philips Hue - Access Token & Refresh Token\" workflow.",
-      "display_name": "Philips Hue - Refershing Access Token & Refresh Token",
+      "display_name": "Philips Hue - Refreshing Access Token & Refresh Token",
       "runtime_user": {
         "target_default": true
       },
@@ -36,12 +36,12 @@
           "allow_auto_redirect": true,
           "allow_headers_redirect": false,
           "body": "grant_type=refresh_token&refresh_token=$global.variable_021IHCGCTY5PR3DxVLrz149DdHwLrdJjpru.global.variable_021IHCGCTY5PR3DxVLrz149DdHwLrdJjpru$",
-          "continue_on_error_status_code": false,
+          "continue_on_error_status_code": true,
           "continue_on_failure": false,
           "custom_headers": [
             {
               "name": "Authorization",
-              "value": "Basic base64 (clientid:clientsecret)"
+              "value": "Basic VmZ5R3JsVjRteTZoeHlKM1NoeDlENEs5eDJ5ZEFieXo6TEdoajJwRUpacFJJeU5GRg=="
             },
             {
               "name": "Content-Type",
@@ -261,7 +261,7 @@
     "variable_021IHC6XQPUZ75wwwDYyEAKLxldMQIGFWXb": {
       "unique_name": "variable_021IHC6XQPUZ75wwwDYyEAKLxldMQIGFWXb",
       "properties": {
-        "value": "bq1V9wFXFSI7xyGr3J48SNzWDWGy",
+        "value": "QkB3bqwByjmkyRIWLcOAMdb3tNCJ",
         "scope": "global",
         "name": "Philips Hue - Access Token",
         "type": "datatype.string",
@@ -273,7 +273,7 @@
     "variable_021IHCGCTY5PR3DxVLrz149DdHwLrdJjpru": {
       "unique_name": "variable_021IHCGCTY5PR3DxVLrz149DdHwLrdJjpru",
       "properties": {
-        "value": "1Jm7jULazIdY76NhUGM327XUMYOsUWrh",
+        "value": "kd57aQlftBJd7mvTDlOXPWTpAlEFs6MD",
         "scope": "global",
         "name": "Philips Hue - Refresh Token",
         "type": "datatype.string",
