@@ -11,7 +11,7 @@
         "is_atomic": false
       },
       "delete_workflow_instance": false,
-      "description": "This workflow will get first status of all lights. Then it will change light - 17 (LED strip) to color red, wait for 10 sec and then change color to blue. \nThis workflow depends on below workflows and should run after them:\n1. Philips Hue - Access Token & Referesh Token\n2. Philips Hue - Refershing Access Token & Refresh Token\n3. Philips Hue - Username Creation\n\nThis workflow can be used as notification method for critial events like threat finding in network. It will turn on light with Red color to notify concern person about threat detection in network. ",
+      "description": "This workflow will get first status of all lights. Then it will change light color to red. \nThis workflow depends on below workflows and should run after them:\n1. Philips Hue - Access Token & Referesh Token\n2. Philips Hue - Refershing Access Token & Refresh Token\n3. Philips Hue - Username Creation\n\nThis workflow can be used as notification method for critial events like threat finding in network. It will turn on light with Red color to notify concern person about threat detection in network. ",
       "display_name": "Philips Hue - Light Control",
       "runtime_user": {
         "target_default": true
@@ -34,7 +34,7 @@
           "action_timeout": 180,
           "allow_auto_redirect": true,
           "allow_headers_redirect": false,
-          "continue_on_error_status_code": false,
+          "continue_on_error_status_code": true,
           "continue_on_failure": false,
           "custom_headers": [
             {
@@ -66,7 +66,7 @@
           "allow_auto_redirect": true,
           "allow_headers_redirect": false,
           "body": "{\n  \"on\": true,\n  \"bri\": 178,\n  \"xy\": [\n    0.6649,\n    0.3151\n  ]\n}",
-          "continue_on_error_status_code": false,
+          "continue_on_error_status_code": true,
           "continue_on_failure": false,
           "custom_headers": [
             {
@@ -79,56 +79,6 @@
             }
           ],
           "display_name": "To chage light color to Red",
-          "method": "PUT",
-          "relative_url": "$global.variable_021RKE4NWKC7G3E2ww9jjsRfwn5l5XNYiFW.global.variable_021RKE4NWKC7G3E2ww9jjsRfwn5l5XNYiFW$/lights/17/state",
-          "runtime_user": {
-            "target_default": true
-          },
-          "skip_execution": false,
-          "target": {
-            "use_workflow_target": true
-          }
-        },
-        "object_type": "definition_activity"
-      },
-      {
-        "unique_name": "definition_activity_021QYHJ6CTMJA6T43dcnkOCJgCwtWvf6cXu",
-        "name": "Sleep",
-        "title": "Sleep for 10 Sec",
-        "type": "core.sleep",
-        "base_type": "activity",
-        "properties": {
-          "continue_on_failure": false,
-          "display_name": "Sleep for 10 Sec",
-          "skip_execution": false,
-          "sleep_interval": 10
-        },
-        "object_type": "definition_activity"
-      },
-      {
-        "unique_name": "definition_activity_021QYHT3EM6UM5oOixaGOXsBBQjSjLbRMIz",
-        "name": "HTTP Request",
-        "title": "Change light color to Blue",
-        "type": "web-service.http_request",
-        "base_type": "activity",
-        "properties": {
-          "action_timeout": 180,
-          "allow_auto_redirect": true,
-          "allow_headers_redirect": false,
-          "body": "{\n  \"on\": true,\n  \"bri\": 178,\n  \"xy\": [\n    0.1546,\n    0.1013\n  ]\n}",
-          "continue_on_error_status_code": false,
-          "continue_on_failure": false,
-          "custom_headers": [
-            {
-              "name": "Authorization",
-              "value": "Bearer $global.variable_021IHC6XQPUZ75wwwDYyEAKLxldMQIGFWXb.global.variable_021IHC6XQPUZ75wwwDYyEAKLxldMQIGFWXb$"
-            },
-            {
-              "name": "Content-Type",
-              "value": "application/json"
-            }
-          ],
-          "display_name": "Change light color to Blue",
           "method": "PUT",
           "relative_url": "$global.variable_021RKE4NWKC7G3E2ww9jjsRfwn5l5XNYiFW.global.variable_021RKE4NWKC7G3E2ww9jjsRfwn5l5XNYiFW$/lights/17/state",
           "runtime_user": {
@@ -169,7 +119,7 @@
     "variable_021IHC6XQPUZ75wwwDYyEAKLxldMQIGFWXb": {
       "unique_name": "variable_021IHC6XQPUZ75wwwDYyEAKLxldMQIGFWXb",
       "properties": {
-        "value": "bq1V9wFXFSI7xyGr3J48SNzWDWGy",
+        "value": "QkB3bqwByjmkyRIWLcOAMdb3tNCJ",
         "scope": "global",
         "name": "Philips Hue - Access Token",
         "type": "datatype.string",
