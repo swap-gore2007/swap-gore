@@ -35,7 +35,7 @@
           "allow_auto_redirect": true,
           "allow_headers_redirect": false,
           "body": "{\"linkbutton\":true}",
-          "continue_on_error_status_code": false,
+          "continue_on_error_status_code": true,
           "continue_on_failure": false,
           "custom_headers": [
             {
@@ -71,7 +71,7 @@
           "allow_auto_redirect": true,
           "allow_headers_redirect": false,
           "body": "{ \"devicetype\":\"SecureX\" }",
-          "continue_on_error_status_code": false,
+          "continue_on_error_status_code": true,
           "continue_on_failure": false,
           "custom_headers": [
             {
@@ -165,7 +165,7 @@
     "variable_021IHC6XQPUZ75wwwDYyEAKLxldMQIGFWXb": {
       "unique_name": "variable_021IHC6XQPUZ75wwwDYyEAKLxldMQIGFWXb",
       "properties": {
-        "value": "bq1V9wFXFSI7xyGr3J48SNzWDWGy",
+        "value": "QkB3bqwByjmkyRIWLcOAMdb3tNCJ",
         "scope": "global",
         "name": "Philips Hue - Access Token",
         "type": "datatype.string",
