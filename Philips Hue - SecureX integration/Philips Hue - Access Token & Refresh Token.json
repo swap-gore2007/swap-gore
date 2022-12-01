@@ -1,8 +1,8 @@
 {
   "workflow": {
     "unique_name": "definition_workflow_021EQNQZDBVSR0AgJxIsOWz9a4duVcho90C",
-    "name": "Philips Hue - Access Token & Referesh Token",
-    "title": "Philips Hue - Access Token & Referesh Token",
+    "name": "Philips Hue - Access Token & Refresh Token",
+    "title": "Philips Hue - Access Token & Refresh Token",
     "type": "generic.workflow",
     "base_type": "workflow",
     "variables": [
@@ -26,8 +26,8 @@
         "is_atomic": false
       },
       "delete_workflow_instance": false,
-      "description": "This workflow generates Access and Refresh token using Authorization code. \nTo get authorization code, follow below steps as mentioned in (https://developers.meethue.com/develop/hue-api/remote-authentication-oauth/)\n1. Register your application i.e. SecureX in Philips Hue developer account (create one if doesn't exist). Get client id and client secret.\n2. Get authorization code by typing below URL in any web browser: https://api.meethue.com/v2/oauth2/authorize?client_id=<client_id>&response_type=code&state=<any_string>\nThis will redirect to the meethue login portal for a user to grant permissions to the resources. Once you allow permission, it will be redirected to URL you mentioned while registering application (SecureX). That redirected link will have authorization \"code\".\nUse authoriztaion code as input to this workflow. \nAlso create global variables \"Philips Hue - Access Token\" & \"Philips Hue - Refresh Token\" and Target \"Philips Hue - OAuth2 Authentication\" https://api.meethue.com/v2/",
-      "display_name": "Philips Hue - Access Token & Referesh Token",
+      "description": "This workflow generates Access and Refresh token using Authorization code. \nTo get authorization code, follow below steps as mentioned in (https://developers.meethue.com/develop/hue-api/remote-authentication-oauth/)\n1. Register your application i.e. SecureX in Philips Hue developer account (create one if doesn't exist). Get client id and client secret.\n2. Get authorization code by typing below URL in any web browser: https://api.meethue.com/v2/oauth2/authorize?client_id=<client_id>&response_type=code&state=<any_string>\nThis will redirect to the meethue login portal for a user to grant permissions to the resources. Once you allow permission, it will be redirected to URL you mentioned while registering application (SecureX). That redirected link will have authorization \"code\".\nUse authoriztaion code as input to this workflow. \nPre-requisites: create global variables \"Philips Hue - Access Token\" & \"Philips Hue - Refresh Token\" and Target \"Philips Hue - OAuth2 Authentication\" (https://api.meethue.com/v2/)",
+      "display_name": "Philips Hue - Access Token & Refresh Token",
       "runtime_user": {
         "target_default": true
       },
@@ -42,7 +42,7 @@
       {
         "unique_name": "definition_activity_021ESIJ40LH3Y7D0Lk5RmjVT7m8e7P52rFL",
         "name": "HTTP Request",
-        "title": "HTTP Request",
+        "title": "Creation of Access token & Refresh Token",
         "type": "web-service.http_request",
         "base_type": "activity",
         "properties": {
@@ -51,19 +51,19 @@
           "allow_auto_redirect": true,
           "allow_headers_redirect": false,
           "body": "grant_type=authorization_code&code=$workflow.definition_workflow_021EQNQZDBVSR0AgJxIsOWz9a4duVcho90C.input.variable_workflow_021I64IAFYK2T3BC44pzL68jITLFSjnIm3b$",
-          "continue_on_error_status_code": false,
+          "continue_on_error_status_code": true,
           "continue_on_failure": false,
           "custom_headers": [
             {
               "name": "Authorization",
-              "value": "Basic base64(clientid:clientsecret)"
+              "value": "Basic VmZ5R3JsVjRteTZoeHlKM1NoeDlENEs5eDJ5ZEFieXo6TEdoajJwRUpacFJJeU5GRg=="
             },
             {
               "name": "Content-Type",
               "value": "application/x-www-form-urlencoded"
             }
           ],
-          "display_name": "HTTP Request",
+          "display_name": "Creation of Access token & Refresh Token",
           "method": "POST",
           "relative_url": "oauth2/token",
           "runtime_user": {
@@ -155,7 +155,7 @@
     "variable_021IHC6XQPUZ75wwwDYyEAKLxldMQIGFWXb": {
       "unique_name": "variable_021IHC6XQPUZ75wwwDYyEAKLxldMQIGFWXb",
       "properties": {
-        "value": "bq1V9wFXFSI7xyGr3J48SNzWDWGy",
+        "value": "QkB3bqwByjmkyRIWLcOAMdb3tNCJ",
         "scope": "global",
         "name": "Philips Hue - Access Token",
         "type": "datatype.string",
@@ -167,7 +167,7 @@
     "variable_021IHCGCTY5PR3DxVLrz149DdHwLrdJjpru": {
       "unique_name": "variable_021IHCGCTY5PR3DxVLrz149DdHwLrdJjpru",
       "properties": {
-        "value": "1Jm7jULazIdY76NhUGM327XUMYOsUWrh",
+        "value": "kd57aQlftBJd7mvTDlOXPWTpAlEFs6MD",
         "scope": "global",
         "name": "Philips Hue - Refresh Token",
         "type": "datatype.string",
