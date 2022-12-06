@@ -5,7 +5,7 @@ This can be act as visual alert mechanism to concern team like SOC or higher exe
 Philips Hue light requires Hue bridge and a supported light. Kindly refer https://www.philips-hue.com/en-in for more information.
 
 Philips Hue API works on OAuth2.0 authentication framework. It provides access token to access API resources. Access token is valid only for 7 days.
-Hence it needs to be refreshed before 7 days. 
+Hence it needs to be refreshed before it's expiry. 
 
 Access token and userid are required to access Philips Hue API resources. Complete process is explained at https://developers.meethue.com/develop/hue-api/remote-authentication-oauth/
 
