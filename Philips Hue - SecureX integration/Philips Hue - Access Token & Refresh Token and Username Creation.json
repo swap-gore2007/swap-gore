@@ -1,0 +1,414 @@
+{
+  "workflow": {
+    "unique_name": "definition_workflow_021EQNQZDBVSR0AgJxIsOWz9a4duVcho90C",
+    "name": "Philips Hue - Access Token & Refresh Token and Username Creation",
+    "title": "Philips Hue - Access Token & Refresh Token and Username Creation",
+    "type": "generic.workflow",
+    "base_type": "workflow",
+    "variables": [
+      {
+        "schema_id": "datatype.string",
+        "properties": {
+          "value": "",
+          "scope": "input",
+          "name": "Philips_Hue_Authorization_Code",
+          "type": "datatype.string",
+          "description": "Run below command on any web browser to get authorization code:\nhttps://api.meethue.com/v2/oauth2/authorize?client_id=VfyGrlV4my6hxyJ3Shx9D4K9x2ydAbyz&response_type=code&state=Passw0rd@123\n\nNote: This code is valid for very short time. It needs to be generated again if it is expired.",
+          "is_required": true,
+          "is_invisible": false
+        },
+        "unique_name": "variable_workflow_021I64IAFYK2T3BC44pzL68jITLFSjnIm3b",
+        "object_type": "variable_workflow"
+      }
+    ],
+    "properties": {
+      "atomic": {
+        "is_atomic": false
+      },
+      "delete_workflow_instance": false,
+      "description": "This workflow generates Access and Refresh token using Authorization code. \nTo get authorization code, follow below steps as mentioned in (https://developers.meethue.com/develop/hue-api/remote-authentication-oauth/)\n1. Register your application i.e. SecureX in Philips Hue developer account (create one if doesn't exist). Get client id and client secret value\n2. Get authorization code by typing below URL in any web browser: https://api.meethue.com/v2/oauth2/authorize?client_id=<client_id>&response_type=code&state=<any_string>\nThis will redirect to the meethue login portal for a user to grant permissions to the resources. Once you allow permission, it will be redirected to URL you mentioned while registering application (SecureX). That redirected link will have authorization \"code\".\nUse authoriztaion code as input to this workflow. ",
+      "display_name": "Philips Hue - Access Token & Refresh Token and Username Creation",
+      "runtime_user": {
+        "target_default": true
+      },
+      "target": {
+        "execute_on_target_group": true,
+        "target_group": {
+          "target_group_id": "target_group_01EJ0TQWPQWBD0qiWqClJKj9FOzwiZRfOFH",
+          "run_on_all_targets": false,
+          "selected_target_types": [
+            "web-service.endpoint"
+          ],
+          "use_criteria": {
+            "choose_target_using_algorithm": "choose_first_with_matching_criteria",
+            "conditions": [
+              {
+                "operator": "eq",
+                "left_operand": "$targetgroup.web-service endpoint.input.display_name$",
+                "right_operand": "Philips Hue - OAuth2 Authentication"
+              }
+            ]
+          }
+        }
+      }
+    },
+    "object_type": "definition_workflow",
+    "actions": [
+      {
+        "unique_name": "definition_activity_021XHGEV13F293JWa5G6IO54Hku3jHPadMo",
+        "name": "Group",
+        "title": "Access Token & Refresh Token Creation",
+        "type": "logic.group",
+        "base_type": "activity",
+        "properties": {
+          "continue_on_failure": false,
+          "display_name": "Access Token & Refresh Token Creation",
+          "skip_execution": false
+        },
+        "object_type": "definition_activity",
+        "actions": [
+          {
+            "unique_name": "definition_activity_021ESIJ40LH3Y7D0Lk5RmjVT7m8e7P52rFL",
+            "name": "HTTP Request",
+            "title": "Creation of Access token & Refresh Token",
+            "type": "web-service.http_request",
+            "base_type": "activity",
+            "properties": {
+              "accept": "*/*",
+              "action_timeout": 180,
+              "allow_auto_redirect": true,
+              "allow_headers_redirect": false,
+              "body": "grant_type=authorization_code&code=$workflow.definition_workflow_021EQNQZDBVSR0AgJxIsOWz9a4duVcho90C.input.variable_workflow_021I64IAFYK2T3BC44pzL68jITLFSjnIm3b$&client_id=$global.variable_021X1UYOACNBU3mxcxXNv3xFTGKSvnNxqtV.global.variable_021X1UYOACNBU3mxcxXNv3xFTGKSvnNxqtV$&client_secret=$global.variable_021X1V5VH9DOQ5RqtfHuzY5nlWizzcSp1OZ.global.variable_021X1V5VH9DOQ5RqtfHuzY5nlWizzcSp1OZ$",
+              "continue_on_error_status_code": true,
+              "continue_on_failure": false,
+              "custom_headers": [
+                {
+                  "name": "Content-Type",
+                  "value": "application/x-www-form-urlencoded"
+                }
+              ],
+              "display_name": "Creation of Access token & Refresh Token",
+              "method": "POST",
+              "relative_url": "oauth2/token",
+              "runtime_user": {
+                "target_default": true
+              },
+              "skip_execution": false,
+              "target": {
+                "override_workflow_target_group_criteria": true,
+                "target_group": {
+                  "run_on_all_targets": false,
+                  "use_criteria": {
+                    "choose_target_using_algorithm": "choose_first_with_matching_criteria",
+                    "conditions": [
+                      {
+                        "left_operand": "$targetgroup.web-service endpoint.input.display_name$",
+                        "operator": "eq",
+                        "right_operand": "Philips Hue - OAuth2 Authentication"
+                      }
+                    ]
+                  }
+                }
+              }
+            },
+            "object_type": "definition_activity"
+          },
+          {
+            "unique_name": "definition_activity_021ID4EDRH2YW2h81C1ADIrI5LDUzinE4sm",
+            "name": "JSONPath Query",
+            "title": "JSONPath Query",
+            "type": "corejava.jsonpathquery",
+            "base_type": "activity",
+            "properties": {
+              "action_timeout": 180,
+              "continue_on_failure": true,
+              "display_name": "JSONPath Query",
+              "input_json": "$activity.definition_activity_021ESIJ40LH3Y7D0Lk5RmjVT7m8e7P52rFL.output.response_body$",
+              "jsonpath_queries": [
+                {
+                  "jsonpath_query": "$.access_token",
+                  "jsonpath_query_name": "access-token",
+                  "jsonpath_query_type": "string",
+                  "zdate_type_format": "yyyy-MM-dd'T'HH:mm:ssZ"
+                },
+                {
+                  "jsonpath_query": "$.refresh_token",
+                  "jsonpath_query_name": "refresh-token",
+                  "jsonpath_query_type": "string"
+                }
+              ],
+              "skip_execution": false
+            },
+            "object_type": "definition_activity"
+          },
+          {
+            "unique_name": "definition_activity_021IHDYQMBWIM6LomcL0r9KhK6mAwprEEPz",
+            "name": "Set Variables",
+            "title": "Set Variables",
+            "type": "core.set_multiple_variables",
+            "base_type": "activity",
+            "properties": {
+              "continue_on_failure": false,
+              "display_name": "Set Variables",
+              "skip_execution": false,
+              "variables_to_update": [
+                {
+                  "variable_to_update": "$global.variable_021IHC6XQPUZ75wwwDYyEAKLxldMQIGFWXb.global.variable_021IHC6XQPUZ75wwwDYyEAKLxldMQIGFWXb$",
+                  "variable_value_new": "$activity.definition_activity_021ID4EDRH2YW2h81C1ADIrI5LDUzinE4sm.output.jsonpath_queries.access-token$"
+                },
+                {
+                  "variable_to_update": "$global.variable_021IHCGCTY5PR3DxVLrz149DdHwLrdJjpru.global.variable_021IHCGCTY5PR3DxVLrz149DdHwLrdJjpru$",
+                  "variable_value_new": "$activity.definition_activity_021ID4EDRH2YW2h81C1ADIrI5LDUzinE4sm.output.jsonpath_queries.refresh-token$"
+                }
+              ]
+            },
+            "object_type": "definition_activity"
+          }
+        ]
+      },
+      {
+        "unique_name": "definition_activity_021XHY9VGVBE01TkvMSWAVyYEbEUwlYxBa0",
+        "name": "Group",
+        "title": "To get Username",
+        "type": "logic.group",
+        "base_type": "activity",
+        "properties": {
+          "continue_on_failure": false,
+          "display_name": "To get Username",
+          "skip_execution": false
+        },
+        "object_type": "definition_activity",
+        "actions": [
+          {
+            "unique_name": "definition_activity_021XHJ60HACQZ3obNC6Xwpzg0ZRsPqd7Vc0",
+            "name": "HTTP Request",
+            "title": "To Push Link Button",
+            "type": "web-service.http_request",
+            "base_type": "activity",
+            "properties": {
+              "action_timeout": 180,
+              "allow_auto_redirect": true,
+              "allow_headers_redirect": false,
+              "body": "{\"linkbutton\":true}",
+              "continue_on_error_status_code": true,
+              "continue_on_failure": false,
+              "custom_headers": [
+                {
+                  "name": "Authorization",
+                  "value": "Bearer $global.variable_021IHC6XQPUZ75wwwDYyEAKLxldMQIGFWXb.global.variable_021IHC6XQPUZ75wwwDYyEAKLxldMQIGFWXb$"
+                },
+                {
+                  "name": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "display_name": "To Push Link Button",
+              "method": "PUT",
+              "relative_url": "0/config",
+              "runtime_user": {
+                "target_default": true
+              },
+              "skip_execution": false,
+              "target": {
+                "override_workflow_target_group_criteria": true,
+                "target_group": {
+                  "run_on_all_targets": false,
+                  "use_criteria": {
+                    "choose_target_using_algorithm": "choose_first_with_matching_criteria",
+                    "conditions": [
+                      {
+                        "left_operand": "$targetgroup.web-service endpoint.input.display_name$",
+                        "operator": "eq",
+                        "right_operand": "Philips Hue Target for Username & Light control"
+                      }
+                    ]
+                  }
+                }
+              }
+            },
+            "object_type": "definition_activity"
+          },
+          {
+            "unique_name": "definition_activity_021XHJGQCCY0K1qUOFUiXBLIndcrVZYZVKx",
+            "name": "HTTP Request",
+            "title": "To get Username",
+            "type": "web-service.http_request",
+            "base_type": "activity",
+            "properties": {
+              "action_timeout": 180,
+              "allow_auto_redirect": true,
+              "allow_headers_redirect": false,
+              "body": "{ \"devicetype\":\"SecureX\" }",
+              "continue_on_error_status_code": true,
+              "continue_on_failure": false,
+              "custom_headers": [
+                {
+                  "name": "Authorization",
+                  "value": "Bearer $global.variable_021IHC6XQPUZ75wwwDYyEAKLxldMQIGFWXb.global.variable_021IHC6XQPUZ75wwwDYyEAKLxldMQIGFWXb$"
+                },
+                {
+                  "name": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "display_name": "To get Username",
+              "method": "POST",
+              "runtime_user": {
+                "target_default": true
+              },
+              "skip_execution": false,
+              "target": {
+                "override_workflow_target_group_criteria": true,
+                "target_group": {
+                  "run_on_all_targets": false,
+                  "use_criteria": {
+                    "choose_target_using_algorithm": "choose_first_with_matching_criteria",
+                    "conditions": [
+                      {
+                        "left_operand": "$targetgroup.web-service endpoint.input.display_name$",
+                        "operator": "eq",
+                        "right_operand": "Philips Hue Target for Username & Light control"
+                      }
+                    ]
+                  }
+                }
+              }
+            },
+            "object_type": "definition_activity"
+          },
+          {
+            "unique_name": "definition_activity_021XHJPBCFGBH5hZkFITqk3WhQF3ZfjJgcj",
+            "name": "JSONPath Query",
+            "title": "JSONPath Query",
+            "type": "corejava.jsonpathquery",
+            "base_type": "activity",
+            "properties": {
+              "action_timeout": 180,
+              "continue_on_failure": true,
+              "display_name": "JSONPath Query",
+              "input_json": "$activity.definition_activity_021XHJGQCCY0K1qUOFUiXBLIndcrVZYZVKx.output.response_body$",
+              "jsonpath_queries": [
+                {
+                  "jsonpath_query": "$..username",
+                  "jsonpath_query_name": "Philips Hue Username",
+                  "jsonpath_query_type": "string"
+                }
+              ],
+              "skip_execution": false
+            },
+            "object_type": "definition_activity"
+          },
+          {
+            "unique_name": "definition_activity_021XHJREHSCB962cYjGXNTprKPwfTPhEVgp",
+            "name": "Set Variables",
+            "title": "Set Variables",
+            "type": "core.set_multiple_variables",
+            "base_type": "activity",
+            "properties": {
+              "continue_on_failure": false,
+              "display_name": "Set Variables",
+              "skip_execution": false,
+              "variables_to_update": [
+                {
+                  "variable_to_update": "$global.variable_021RKE4NWKC7G3E2ww9jjsRfwn5l5XNYiFW.global.variable_021RKE4NWKC7G3E2ww9jjsRfwn5l5XNYiFW$",
+                  "variable_value_new": "$activity.definition_activity_021XHJPBCFGBH5hZkFITqk3WhQF3ZfjJgcj.output.jsonpath_queries.Philips Hue Username$"
+                }
+              ]
+            },
+            "object_type": "definition_activity"
+          }
+        ]
+      }
+    ],
+    "categories": [
+      "category_1BMfMXSnJMyt5Ihqi7rWJr5N8cf"
+    ]
+  },
+  "target_groups": {
+    "target_group_01EJ0TQWPQWBD0qiWqClJKj9FOzwiZRfOFH": {
+      "unique_name": "target_group_01EJ0TQWPQWBD0qiWqClJKj9FOzwiZRfOFH",
+      "name": "Default TargetGroup",
+      "title": "Default TargetGroup",
+      "type": "generic.target_group",
+      "base_type": "target_group",
+      "version": "1.0.0",
+      "targets": [
+        {
+          "data_target_type": "web-service.endpoint",
+          "view_target_type": "web-service.endpoint",
+          "include_all_targets": true
+        },
+        {
+          "data_target_type": "email.smtp_endpoint",
+          "view_target_type": "email.smtp_endpoint",
+          "include_all_targets": true
+        }
+      ],
+      "object_type": "target_group"
+    }
+  },
+  "variables": {
+    "variable_021IHC6XQPUZ75wwwDYyEAKLxldMQIGFWXb": {
+      "unique_name": "variable_021IHC6XQPUZ75wwwDYyEAKLxldMQIGFWXb",
+      "properties": {
+        "value": "5wN1upF6sDs4nQAX9SrxnXNAh2dL",
+        "scope": "global",
+        "name": "Philips Hue - Access Token",
+        "type": "datatype.string",
+        "is_required": false,
+        "is_invisible": false
+      },
+      "object_type": "variable"
+    },
+    "variable_021IHCGCTY5PR3DxVLrz149DdHwLrdJjpru": {
+      "unique_name": "variable_021IHCGCTY5PR3DxVLrz149DdHwLrdJjpru",
+      "properties": {
+        "value": "4ArOIEpZAdnTAeQdjAv1IHIXQ0TsP9Z9",
+        "scope": "global",
+        "name": "Philips Hue - Refresh Token",
+        "type": "datatype.string",
+        "is_required": false,
+        "is_invisible": false
+      },
+      "object_type": "variable"
+    },
+    "variable_021RKE4NWKC7G3E2ww9jjsRfwn5l5XNYiFW": {
+      "unique_name": "variable_021RKE4NWKC7G3E2ww9jjsRfwn5l5XNYiFW",
+      "properties": {
+        "value": "4K4dPsWLE5JDwFssQvPP-rz3xx6Qtx29Bz8MdbuE",
+        "scope": "global",
+        "name": "Philips Hue - Userid",
+        "type": "datatype.string",
+        "is_required": false,
+        "is_invisible": false
+      },
+      "object_type": "variable"
+    },
+    "variable_021X1UYOACNBU3mxcxXNv3xFTGKSvnNxqtV": {
+      "unique_name": "variable_021X1UYOACNBU3mxcxXNv3xFTGKSvnNxqtV",
+      "properties": {
+        "value": "VfyGrlV4my6hxyJ3Shx9D4K9x2ydAbyz",
+        "scope": "global",
+        "name": "Philips Hue - Client ID",
+        "type": "datatype.string",
+        "description": "Philips Hue portal will provide client ID once application is registered.",
+        "is_required": false,
+        "is_invisible": false
+      },
+      "object_type": "variable"
+    },
+    "variable_021X1V5VH9DOQ5RqtfHuzY5nlWizzcSp1OZ": {
+      "unique_name": "variable_021X1V5VH9DOQ5RqtfHuzY5nlWizzcSp1OZ",
+      "properties": {
+        "value": "LGhj2pEJZpRIyNFF",
+        "scope": "global",
+        "name": "Philips Hue - Client Secret",
+        "type": "datatype.string",
+        "description": "Philips Hue portal will provide client ID once application is registered.",
+        "is_required": false,
+        "is_invisible": false
+      },
+      "object_type": "variable"
+    }
+  }
+}

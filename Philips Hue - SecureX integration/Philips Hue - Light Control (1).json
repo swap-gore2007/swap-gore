@@ -1,0 +1,178 @@
+{
+  "workflow": {
+    "unique_name": "definition_workflow_021I5UQKUA5X54hnqE1ba9tLcv7fxMVQDNj",
+    "name": "Philips Hue - Light Control",
+    "title": "Philips Hue - Light Control",
+    "type": "generic.workflow",
+    "base_type": "workflow",
+    "variables": [
+      {
+        "schema_id": "datatype.string",
+        "properties": {
+          "value": "",
+          "scope": "input",
+          "name": "Philips Hue Smart Light ID",
+          "type": "datatype.string",
+          "description": "Every smart light has unique ID. \nKindly refer below URL to get smart light ID: https://developers.meethue.com/develop/get-started-2/",
+          "is_required": true,
+          "is_invisible": false
+        },
+        "unique_name": "variable_workflow_021XRVHRGPY851e9qUauTbl1s2bDEle2A7y",
+        "object_type": "variable_workflow"
+      }
+    ],
+    "properties": {
+      "atomic": {
+        "is_atomic": false
+      },
+      "delete_workflow_instance": false,
+      "description": "This workflow will change light color to red. \n\nThis workflow can be used as notification method for critical events like threat/attack finding in network. It will turn on light with Red color to notify concern team/SOC or IT head about threat detection in network. Visual alert is more effective as compared to email alert. \n\nThis workflow can be used in any threat detection workflow or any workflow that requires attention.\n\nThis workflow requires valid access token and userid. Hence it is important that below workflows are executed before this workflow.\n1. Philips Hue - Access Token & Refresh Token and Username Creation\n2. Philips Hue - Refreshing Access Token & Refresh Token\n",
+      "display_name": "Philips Hue - Light Control",
+      "runtime_user": {
+        "target_default": true
+      },
+      "target": {
+        "execute_on_target_group": true,
+        "target_group": {
+          "target_group_id": "target_group_01EJ0TQWPQWBD0qiWqClJKj9FOzwiZRfOFH",
+          "run_on_all_targets": false,
+          "selected_target_types": [
+            "web-service.endpoint"
+          ],
+          "use_criteria": {
+            "choose_target_using_algorithm": "choose_first_with_matching_criteria",
+            "conditions": [
+              {
+                "operator": "eq",
+                "left_operand": "$targetgroup.web-service endpoint.input.display_name$",
+                "right_operand": "Philips Hue Target for Username & Light control"
+              }
+            ]
+          }
+        }
+      }
+    },
+    "object_type": "definition_workflow",
+    "actions": [
+      {
+        "unique_name": "definition_activity_021I5V0V0ACGL6ffaXDznBgFq8EYIvrUY9g",
+        "name": "HTTP Request",
+        "title": "To get Philips Hue Light status",
+        "type": "web-service.http_request",
+        "base_type": "activity",
+        "properties": {
+          "action_timeout": 180,
+          "allow_auto_redirect": true,
+          "allow_headers_redirect": false,
+          "continue_on_error_status_code": true,
+          "continue_on_failure": false,
+          "custom_headers": [
+            {
+              "name": "Authorization",
+              "value": "Bearer $global.variable_021IHC6XQPUZ75wwwDYyEAKLxldMQIGFWXb.global.variable_021IHC6XQPUZ75wwwDYyEAKLxldMQIGFWXb$"
+            }
+          ],
+          "display_name": "To get Philips Hue Light status",
+          "method": "GET",
+          "relative_url": "$global.variable_021RKE4NWKC7G3E2ww9jjsRfwn5l5XNYiFW.global.variable_021RKE4NWKC7G3E2ww9jjsRfwn5l5XNYiFW$/lights",
+          "runtime_user": {
+            "target_default": true
+          },
+          "skip_execution": false,
+          "target": {
+            "use_workflow_target_group": true
+          }
+        },
+        "object_type": "definition_activity"
+      },
+      {
+        "unique_name": "definition_activity_021QX3LHUANQQ0DtWVPVgG6ufs5VzDGCctO",
+        "name": "HTTP Request",
+        "title": "To chage light color to Red",
+        "type": "web-service.http_request",
+        "base_type": "activity",
+        "properties": {
+          "action_timeout": 180,
+          "allow_auto_redirect": true,
+          "allow_headers_redirect": false,
+          "body": "{\n  \"on\": true,\n  \"bri\": 178,\n  \"xy\": [\n    0.6649,\n    0.3151\n  ]\n}",
+          "continue_on_error_status_code": true,
+          "continue_on_failure": false,
+          "custom_headers": [
+            {
+              "name": "Authorization",
+              "value": "Bearer $global.variable_021IHC6XQPUZ75wwwDYyEAKLxldMQIGFWXb.global.variable_021IHC6XQPUZ75wwwDYyEAKLxldMQIGFWXb$"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "display_name": "To chage light color to Red",
+          "method": "PUT",
+          "relative_url": "$global.variable_021RKE4NWKC7G3E2ww9jjsRfwn5l5XNYiFW.global.variable_021RKE4NWKC7G3E2ww9jjsRfwn5l5XNYiFW$/lights/$workflow.definition_workflow_021I5UQKUA5X54hnqE1ba9tLcv7fxMVQDNj.input.variable_workflow_021XRVHRGPY851e9qUauTbl1s2bDEle2A7y$/state",
+          "runtime_user": {
+            "target_default": true
+          },
+          "skip_execution": false,
+          "target": {
+            "use_workflow_target_group": true
+          }
+        },
+        "object_type": "definition_activity"
+      }
+    ],
+    "categories": [
+      "category_1BMfMXSnJMyt5Ihqi7rWJr5N8cf"
+    ]
+  },
+  "target_groups": {
+    "target_group_01EJ0TQWPQWBD0qiWqClJKj9FOzwiZRfOFH": {
+      "unique_name": "target_group_01EJ0TQWPQWBD0qiWqClJKj9FOzwiZRfOFH",
+      "name": "Default TargetGroup",
+      "title": "Default TargetGroup",
+      "type": "generic.target_group",
+      "base_type": "target_group",
+      "version": "1.0.0",
+      "targets": [
+        {
+          "data_target_type": "web-service.endpoint",
+          "view_target_type": "web-service.endpoint",
+          "include_all_targets": true
+        },
+        {
+          "data_target_type": "email.smtp_endpoint",
+          "view_target_type": "email.smtp_endpoint",
+          "include_all_targets": true
+        }
+      ],
+      "object_type": "target_group"
+    }
+  },
+  "variables": {
+    "variable_021IHC6XQPUZ75wwwDYyEAKLxldMQIGFWXb": {
+      "unique_name": "variable_021IHC6XQPUZ75wwwDYyEAKLxldMQIGFWXb",
+      "properties": {
+        "value": "5wN1upF6sDs4nQAX9SrxnXNAh2dL",
+        "scope": "global",
+        "name": "Philips Hue - Access Token",
+        "type": "datatype.string",
+        "is_required": false,
+        "is_invisible": false
+      },
+      "object_type": "variable"
+    },
+    "variable_021RKE4NWKC7G3E2ww9jjsRfwn5l5XNYiFW": {
+      "unique_name": "variable_021RKE4NWKC7G3E2ww9jjsRfwn5l5XNYiFW",
+      "properties": {
+        "value": "4K4dPsWLE5JDwFssQvPP-rz3xx6Qtx29Bz8MdbuE",
+        "scope": "global",
+        "name": "Philips Hue - Userid",
+        "type": "datatype.string",
+        "is_required": false,
+        "is_invisible": false
+      },
+      "object_type": "variable"
+    }
+  }
+}

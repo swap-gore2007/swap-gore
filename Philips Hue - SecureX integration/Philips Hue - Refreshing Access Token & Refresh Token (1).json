@@ -1,0 +1,456 @@
+{
+  "workflow": {
+    "unique_name": "definition_workflow_021IHP67042647O7JSB2M1wigNbof5h8wV5",
+    "name": "Philips Hue - Refreshing Access Token & Refresh Token",
+    "title": "Philips Hue - Refreshing Access Token & Refresh Token",
+    "type": "generic.workflow",
+    "base_type": "workflow",
+    "variables": [
+      {
+        "schema_id": "datatype.secure_string",
+        "properties": {
+          "value": "*****",
+          "scope": "input",
+          "name": "Webex Access Token",
+          "type": "datatype.secure_string",
+          "description": "The access token to use to authenticate to the Webex API. Information about using a bot, which is what we recommend, can be found here: https://developer.webex.com/docs/bots",
+          "is_required": false,
+          "is_invisible": false
+        },
+        "unique_name": "variable_workflow_021XK8T7D7NSH68vDNzXG4PCIY5e6KSptmm",
+        "object_type": "variable_workflow"
+      },
+      {
+        "schema_id": "datatype.string",
+        "properties": {
+          "value": "DMG_Room",
+          "scope": "input",
+          "name": "Webex Room Name",
+          "type": "datatype.string",
+          "description": "The name of the Webex room to post messages to. If using a bot, make sure to invite your bot to the room before attempting to send messages. If you don't want to use Webex, leave this blank",
+          "is_required": false,
+          "is_invisible": false
+        },
+        "unique_name": "variable_workflow_021XK87H4K68A7eQGe45VbfNEjBpxuN57Op",
+        "object_type": "variable_workflow"
+      }
+    ],
+    "properties": {
+      "atomic": {
+        "is_atomic": false
+      },
+      "delete_workflow_instance": false,
+      "description": "This workflow will refresh Philips Hue API access token and refresh token before 7 days. This is because generated Access token will expire after 7 days.\nThis workflow will use already created Refresh Token in \"Philips Hue - Access Token & Refresh Token and Username Creation\" workflow.",
+      "display_name": "Philips Hue - Refreshing Access Token & Refresh Token",
+      "runtime_user": {
+        "target_default": true
+      },
+      "target": {
+        "execute_on_target_group": true,
+        "target_group": {
+          "target_group_id": "target_group_01EJ0TQWPQWBD0qiWqClJKj9FOzwiZRfOFH",
+          "run_on_all_targets": false,
+          "selected_target_types": [
+            "web-service.endpoint"
+          ],
+          "use_criteria": {
+            "choose_target_using_algorithm": "choose_first_with_matching_criteria",
+            "conditions": [
+              {
+                "operator": "eq",
+                "left_operand": "$targetgroup.web-service endpoint.input.display_name$",
+                "right_operand": "Philips Hue - OAuth2 Authentication"
+              }
+            ]
+          }
+        }
+      }
+    },
+    "object_type": "definition_workflow",
+    "actions": [
+      {
+        "unique_name": "definition_activity_021IHP6AFE4EE53xAoK8TWolVgNEoHiUX3S",
+        "name": "HTTP Request",
+        "title": "Refresh Access token and Refresh Token",
+        "type": "web-service.http_request",
+        "base_type": "activity",
+        "properties": {
+          "accept": "*/*",
+          "action_timeout": 180,
+          "allow_auto_redirect": true,
+          "allow_headers_redirect": false,
+          "body": "grant_type=refresh_token&refresh_token=$global.variable_021IHCGCTY5PR3DxVLrz149DdHwLrdJjpru.global.variable_021IHCGCTY5PR3DxVLrz149DdHwLrdJjpru$&client_id=$global.variable_021X1UYOACNBU3mxcxXNv3xFTGKSvnNxqtV.global.variable_021X1UYOACNBU3mxcxXNv3xFTGKSvnNxqtV$&client_secret=$global.variable_021X1V5VH9DOQ5RqtfHuzY5nlWizzcSp1OZ.global.variable_021X1V5VH9DOQ5RqtfHuzY5nlWizzcSp1OZ$",
+          "continue_on_error_status_code": true,
+          "continue_on_failure": false,
+          "custom_headers": [
+            {
+              "name": "Content-Type",
+              "value": "application/x-www-form-urlencoded"
+            }
+          ],
+          "display_name": "Refresh Access token and Refresh Token",
+          "method": "POST",
+          "relative_url": "oauth2/token",
+          "runtime_user": {
+            "target_default": true
+          },
+          "skip_execution": false,
+          "target": {
+            "use_workflow_target_group": true
+          }
+        },
+        "object_type": "definition_activity"
+      },
+      {
+        "unique_name": "definition_activity_021IHP6BAYGHI1bhfhS5MMeYVU4jkF7Xl9D",
+        "name": "JSONPath Query",
+        "title": "JSONPath Query",
+        "type": "corejava.jsonpathquery",
+        "base_type": "activity",
+        "properties": {
+          "action_timeout": 180,
+          "continue_on_failure": true,
+          "display_name": "JSONPath Query",
+          "input_json": "$activity.definition_activity_021IHP6AFE4EE53xAoK8TWolVgNEoHiUX3S.output.response_body$",
+          "jsonpath_queries": [
+            {
+              "jsonpath_query": "$.access_token",
+              "jsonpath_query_name": "access-token",
+              "jsonpath_query_type": "string",
+              "zdate_type_format": "yyyy-MM-dd'T'HH:mm:ssZ"
+            },
+            {
+              "jsonpath_query": "$.refresh_token",
+              "jsonpath_query_name": "refresh-token",
+              "jsonpath_query_type": "string",
+              "zdate_type_format": "yyyy-MM-dd'T'HH:mm:ssZ"
+            }
+          ],
+          "skip_execution": false
+        },
+        "object_type": "definition_activity"
+      },
+      {
+        "unique_name": "definition_activity_021IHP6CTMOSI3iboZkcp3ALHN8iugZwAuF",
+        "name": "Set Variables",
+        "title": "Set Variables",
+        "type": "core.set_multiple_variables",
+        "base_type": "activity",
+        "properties": {
+          "continue_on_failure": false,
+          "display_name": "Set Variables",
+          "skip_execution": false,
+          "variables_to_update": [
+            {
+              "variable_to_update": "$global.variable_021IHC6XQPUZ75wwwDYyEAKLxldMQIGFWXb.global.variable_021IHC6XQPUZ75wwwDYyEAKLxldMQIGFWXb$",
+              "variable_value_new": "$activity.definition_activity_021IHP6BAYGHI1bhfhS5MMeYVU4jkF7Xl9D.output.jsonpath_queries.access-token$"
+            },
+            {
+              "variable_to_update": "$global.variable_021IHCGCTY5PR3DxVLrz149DdHwLrdJjpru.global.variable_021IHCGCTY5PR3DxVLrz149DdHwLrdJjpru$",
+              "variable_value_new": "$activity.definition_activity_021IHP6BAYGHI1bhfhS5MMeYVU4jkF7Xl9D.output.jsonpath_queries.refresh-token$"
+            }
+          ]
+        },
+        "object_type": "definition_activity"
+      },
+      {
+        "unique_name": "definition_activity_021XK48ESSWKL0QKAlmijyfSs4LkJfj7IyU",
+        "name": "Condition Block",
+        "title": "Was a Webex room provided?",
+        "type": "logic.if_else",
+        "base_type": "activity",
+        "properties": {
+          "continue_on_failure": false,
+          "display_name": "Was a Webex room provided?",
+          "skip_execution": false
+        },
+        "object_type": "definition_activity",
+        "blocks": [
+          {
+            "unique_name": "definition_activity_021XK48F0MVOT4VQh0cbDXybyWM6r8Vu4Sw",
+            "name": "Condition Branch",
+            "title": "Yes",
+            "type": "logic.condition_block",
+            "base_type": "activity",
+            "properties": {
+              "condition": {
+                "left_operand": "$workflow.definition_workflow_021IHP67042647O7JSB2M1wigNbof5h8wV5.input.variable_workflow_021XK87H4K68A7eQGe45VbfNEjBpxuN57Op$",
+                "operator": "ne",
+                "right_operand": ""
+              },
+              "continue_on_failure": false,
+              "display_name": "Yes",
+              "skip_execution": false
+            },
+            "object_type": "definition_activity",
+            "actions": [
+              {
+                "unique_name": "definition_activity_021XKBCZDMV931a5Xk0EuHEomRU0W0MmG58",
+                "name": "Webex - Search for Room",
+                "title": "Webex - Search for Room",
+                "type": "workflow.atomic_workflow",
+                "base_type": "subworkflow",
+                "properties": {
+                  "continue_on_failure": true,
+                  "display_name": "Webex - Search for Room",
+                  "input": {
+                    "variable_workflow_01PP790MCX1DN3EitpQebkUyJS65DbwS3nU": "$workflow.definition_workflow_021IHP67042647O7JSB2M1wigNbof5h8wV5.input.variable_workflow_021XK8T7D7NSH68vDNzXG4PCIY5e6KSptmm$",
+                    "variable_workflow_01PP790MCXB392D3R8pxh9fgOTjTde2bcMW": "$workflow.definition_workflow_021IHP67042647O7JSB2M1wigNbof5h8wV5.input.variable_workflow_021XK87H4K68A7eQGe45VbfNEjBpxuN57Op$",
+                    "variable_workflow_01PP790MCXHP55YE6ylOEITWsWbUFJeyWGv": "",
+                    "variable_workflow_01PP790MCXM9W1MUwo85y8iNRCoQuQ4RGNa": ""
+                  },
+                  "runtime_user": {
+                    "target_default": true
+                  },
+                  "skip_execution": false,
+                  "target": {
+                    "override_workflow_target_group_criteria": true,
+                    "target_group": {
+                      "run_on_all_targets": false,
+                      "use_criteria": {
+                        "choose_target_using_algorithm": "choose_first_with_matching_criteria",
+                        "conditions": [
+                          {
+                            "left_operand": "$targetgroup.web-service endpoint.input.display_name$",
+                            "operator": "eq",
+                            "right_operand": "Webex Teams"
+                          }
+                        ]
+                      }
+                    }
+                  },
+                  "workflow_id": "definition_workflow_01PP790MKJNWV6XyJuLdUyNlM2UV3JJACez",
+                  "workflow_name": "Webex - Search for Room"
+                },
+                "object_type": "definition_activity"
+              },
+              {
+                "unique_name": "definition_activity_021XKE5JRVTR0533PFIHETGxALVQEp39cKB",
+                "name": "Condition Block",
+                "title": "Did we find the room?",
+                "type": "logic.if_else",
+                "base_type": "activity",
+                "properties": {
+                  "continue_on_failure": false,
+                  "display_name": "Did we find the room?",
+                  "skip_execution": false
+                },
+                "object_type": "definition_activity",
+                "blocks": [
+                  {
+                    "unique_name": "definition_activity_021XKE5K1GNCZ3S1MvAtos3ZLKp55t1aFXx",
+                    "name": "Condition Branch",
+                    "title": "Yes",
+                    "type": "logic.condition_block",
+                    "base_type": "activity",
+                    "properties": {
+                      "condition": {
+                        "left_operand": "$activity.definition_activity_021XKBCZDMV931a5Xk0EuHEomRU0W0MmG58.output.succeeded$",
+                        "operator": "eq",
+                        "right_operand": true
+                      },
+                      "continue_on_failure": false,
+                      "display_name": "Yes",
+                      "skip_execution": false
+                    },
+                    "object_type": "definition_activity",
+                    "actions": [
+                      {
+                        "unique_name": "definition_activity_021XKFOW7WHC21Our8v96JIqxJXBTojiF5X",
+                        "name": "Webex - Post Message to Room",
+                        "title": "Webex - Post Message to Room",
+                        "type": "workflow.atomic_workflow",
+                        "base_type": "subworkflow",
+                        "properties": {
+                          "continue_on_failure": false,
+                          "display_name": "Webex - Post Message to Room",
+                          "input": {
+                            "variable_workflow_01PP78DJH1TI76BYfsu9g0Tqj2S6cUxjtu5": "$activity.definition_activity_021XKBCZDMV931a5Xk0EuHEomRU0W0MmG58.output.variable_workflow_01PP790MCXJ7Y5cAWcGZWbG4Es0126zb1I6$",
+                            "variable_workflow_01PP78DJH1XNQ7gNQ5iZdperRHqrppzARXC": "$workflow.definition_workflow_021IHP67042647O7JSB2M1wigNbof5h8wV5.input.variable_workflow_021XK8T7D7NSH68vDNzXG4PCIY5e6KSptmm$",
+                            "variable_workflow_01PP78DJH1YWL3allalGQbg1VkgKwh9GvCi": "Philips Hue API's access token and refresh token are refreshed now.",
+                            "variable_workflow_01PP78DJH22BB3Ej3I8tJ4OCQur0unYGjj9": "",
+                            "variable_workflow_01SVERQNMKN8N6vqX2djMtAfshphGydGsH8": ""
+                          },
+                          "runtime_user": {
+                            "target_default": true
+                          },
+                          "skip_execution": false,
+                          "target": {
+                            "override_workflow_target_group_criteria": true,
+                            "target_group": {
+                              "run_on_all_targets": false,
+                              "use_criteria": {
+                                "choose_target_using_algorithm": "choose_first_with_matching_criteria",
+                                "conditions": [
+                                  {
+                                    "left_operand": "$targetgroup.web-service endpoint.input.display_name$",
+                                    "operator": "eq",
+                                    "right_operand": "Webex Teams"
+                                  }
+                                ]
+                              }
+                            }
+                          },
+                          "workflow_id": "definition_workflow_01PP78DJMXS415nTjonujf03ROkr6t2PNyw",
+                          "workflow_name": "Webex - Post Message to Room"
+                        },
+                        "object_type": "definition_activity"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "categories": [
+      "category_1BMfMXSnJMyt5Ihqi7rWJr5N8cf"
+    ]
+  },
+  "triggers": {
+    "triggerschedule_021IM1C6PAS537h9o7J0EPWcYalkuGTh6OQ": {
+      "workflow_id": "definition_workflow_021IHP67042647O7JSB2M1wigNbof5h8wV5",
+      "name": "Twice a week",
+      "title": "",
+      "lowercase_name": "schedule.twice_a_week",
+      "type": "schedule",
+      "base_type": "trigger",
+      "ref_id": "schedule_021IIH5ORJPZO1pBk8wUXR9W0sjdgMUb4hc",
+      "version": "1.0.0",
+      "disabled": false,
+      "unique_name": "triggerschedule_021IM1C6PAS537h9o7J0EPWcYalkuGTh6OQ",
+      "object_type": "triggerschedule"
+    }
+  },
+  "schedules": {
+    "schedule_021IIH5ORJPZO1pBk8wUXR9W0sjdgMUb4hc": {
+      "unique_name": "schedule_021IIH5ORJPZO1pBk8wUXR9W0sjdgMUb4hc",
+      "name": "Philips Hue - Refresh Access Token",
+      "description": "This schedule will run on every Sunday and Wednesday.",
+      "type": "basic.schedule",
+      "base_type": "schedule",
+      "properties": {
+        "calendar": "calendar_recurring_021ILBO18UP561TjZjGbP7g8Ugk4DEB0wmO",
+        "timezone": "Asia/Kolkata",
+        "starttime": "09:00",
+        "interval_hours": 0,
+        "interval_minutes": 0,
+        "number_of_times": 1,
+        "display_name": "Philips Hue - Refresh Access Token",
+        "description": "This schedule will run on every Sunday and Wednesday."
+      },
+      "version": "1.0.0",
+      "object_type": "schedule"
+    }
+  },
+  "calendars": {
+    "calendar_recurring_021ILBO18UP561TjZjGbP7g8Ugk4DEB0wmO": {
+      "unique_name": "calendar_recurring_021ILBO18UP561TjZjGbP7g8Ugk4DEB0wmO",
+      "name": "Twice a week",
+      "title": "Twice a week",
+      "base_type": "calendar",
+      "type": "calendar.recurring",
+      "properties": {
+        "date_range": {
+          "end_date": "0001-01-01",
+          "start_date": "2022-11-18"
+        },
+        "repeats": {
+          "every": 1,
+          "on": [
+            "sun",
+            "wed"
+          ],
+          "period": "weekly"
+        }
+      },
+      "version": "1.0.0",
+      "object_type": "calendar_recurring"
+    }
+  },
+  "target_groups": {
+    "target_group_01EJ0TQWPQWBD0qiWqClJKj9FOzwiZRfOFH": {
+      "unique_name": "target_group_01EJ0TQWPQWBD0qiWqClJKj9FOzwiZRfOFH",
+      "name": "Default TargetGroup",
+      "title": "Default TargetGroup",
+      "type": "generic.target_group",
+      "base_type": "target_group",
+      "version": "1.0.0",
+      "targets": [
+        {
+          "data_target_type": "web-service.endpoint",
+          "view_target_type": "web-service.endpoint",
+          "include_all_targets": true
+        },
+        {
+          "data_target_type": "email.smtp_endpoint",
+          "view_target_type": "email.smtp_endpoint",
+          "include_all_targets": true
+        }
+      ],
+      "object_type": "target_group"
+    }
+  },
+  "variables": {
+    "variable_021IHC6XQPUZ75wwwDYyEAKLxldMQIGFWXb": {
+      "unique_name": "variable_021IHC6XQPUZ75wwwDYyEAKLxldMQIGFWXb",
+      "properties": {
+        "value": "5wN1upF6sDs4nQAX9SrxnXNAh2dL",
+        "scope": "global",
+        "name": "Philips Hue - Access Token",
+        "type": "datatype.string",
+        "is_required": false,
+        "is_invisible": false
+      },
+      "object_type": "variable"
+    },
+    "variable_021IHCGCTY5PR3DxVLrz149DdHwLrdJjpru": {
+      "unique_name": "variable_021IHCGCTY5PR3DxVLrz149DdHwLrdJjpru",
+      "properties": {
+        "value": "4ArOIEpZAdnTAeQdjAv1IHIXQ0TsP9Z9",
+        "scope": "global",
+        "name": "Philips Hue - Refresh Token",
+        "type": "datatype.string",
+        "is_required": false,
+        "is_invisible": false
+      },
+      "object_type": "variable"
+    },
+    "variable_021X1UYOACNBU3mxcxXNv3xFTGKSvnNxqtV": {
+      "unique_name": "variable_021X1UYOACNBU3mxcxXNv3xFTGKSvnNxqtV",
+      "properties": {
+        "value": "VfyGrlV4my6hxyJ3Shx9D4K9x2ydAbyz",
+        "scope": "global",
+        "name": "Philips Hue - Client ID",
+        "type": "datatype.string",
+        "description": "Philips Hue portal will provide client ID once application is registered.",
+        "is_required": false,
+        "is_invisible": false
+      },
+      "object_type": "variable"
+    },
+    "variable_021X1V5VH9DOQ5RqtfHuzY5nlWizzcSp1OZ": {
+      "unique_name": "variable_021X1V5VH9DOQ5RqtfHuzY5nlWizzcSp1OZ",
+      "properties": {
+        "value": "LGhj2pEJZpRIyNFF",
+        "scope": "global",
+        "name": "Philips Hue - Client Secret",
+        "type": "datatype.string",
+        "description": "Philips Hue portal will provide client ID once application is registered.",
+        "is_required": false,
+        "is_invisible": false
+      },
+      "object_type": "variable"
+    }
+  },
+  "atomic_workflows": [
+    "definition_workflow_01PP790MKJNWV6XyJuLdUyNlM2UV3JJACez",
+    "definition_workflow_01PP78DJMXS415nTjonujf03ROkr6t2PNyw"
+  ],
+  "dependent_workflows": [
+    "definition_workflow_01PP790MKJNWV6XyJuLdUyNlM2UV3JJACez",
+    "definition_workflow_01PP78DJMXS415nTjonujf03ROkr6t2PNyw"
+  ]
+}
