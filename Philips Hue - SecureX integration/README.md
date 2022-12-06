@@ -9,14 +9,11 @@ Hence it needs to be refreshed before it's expiry.
 
 Access token and userid are required to access Philips Hue API resources. Complete process is explained at https://developers.meethue.com/develop/hue-api/remote-authentication-oauth/
 
-1. "Philips Hue - Access Token & Referesh Token" workflow generates access token and refresh token. It requires authorization code as pre-requisite/input.
-Workflow description provides steps to get authorization code. Kindly follow the same.
+1. "Philips Hue - Access Token & Referesh Token and Username Creation" workflow generates access token and refresh token. It also creates Username in Philips Hue system. This userid will require to manage lights.
 
 2. "Philips Hue - Refershing Access Token & Refresh Token" workflow refreshes access token within seven days. This helps to keep access token valid.
 
-3. "Philips Hue - Whitelist Or Username Creation" workflow creates userid in Philips Hue system. This userid will require to manage lights.
-
-4. "Philips Hue - Light Control" workflow switch on light, change color to RED, wait for 10 sec and then change color to blue. This workflow requires access token and 
+3. "Philips Hue - Light Control" workflow switch on light and change it's color to RED. This workflow requires access token and 
 userid created in above workflows. This can be used as alert mechanism in any other workflows.
 
 If you need any help, kindly contact me at swap.gore2007@gmail.com
