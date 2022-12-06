@@ -1,6 +1,6 @@
 # swap-gore
 These workflows help to integrate Philips Hue light with Cisco SecureX platform. Philips Hue light can be managed (switch on or change color) in a critical event. 
-This can be act as visual alert mechanism to concern team/resource to indicate critical situation in the network. 
+This can be act as visual alert mechanism to concern team like SOC or higher executive to indicate critical situation in the network. 
 
 Philips Hue light requires Hue bridge and a supported light. Kindly refer https://www.philips-hue.com/en-in for more information.
 
